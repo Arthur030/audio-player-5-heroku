@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3001
+const { Pool, Client } = require('pg')
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
@@ -13,23 +14,23 @@ app.use(cors({
 )
 app.use(express.json())
 
+const pool = new Pool({
+    user: 'vqfdkbtimgfhmq',
+    host: 'ec2-3-248-103-75.eu-west-1.compute.amazonaws.com',
+    database: 'db9elntje5gube',
+    password: 'd657eb752a6a2ec28ad993df5cc98f494d9fac260a95be96d18c14437b982e58',
+    port: '5432'
 
-
-let mysql = require('mysql')
-let connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'audio-player-db',
-    password: 'Sl5aPP_NaKobGxh0',
-    database: 'audio-player-db'
 })
 
 app.post("/create", (req, res) => {
 
-    const artist = req.body.artist
-    const title = req.body.title
-    const audio = req.body.audio
+    // const artist = req.body.artist
+    // const title = req.body.title
+    // const audio = req.body.audio
     
-    connection.query("INSERT INTO tracks (auth, title, src) VALUES (?, ?, ?)", [artist,title,audio], (err, result) => {
+    pool.query("CREATE TABLE tracks (id int NOT NULL AUTO_INCREMENT, date datetime, artist varchar 255, title varchar 255, audio varchar 255)", 
+    [artist,title,audio], (err, result) => {
         if (err) {
             console.log(err)
         }
